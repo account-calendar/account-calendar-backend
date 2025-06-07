@@ -11,5 +11,5 @@ export const getTypeOrmConfig = (configService: ConfigService): TypeOrmModuleOpt
   password: configService.get('DB_PASSWORD', 'root'),
   database: configService.get('DB_DATABASE', 'account_calendar'),
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  synchronize: configService.get('DB_SYNCHRONIZE', !isProduction === true),
+  synchronize: configService.get('DB_SYNCHRONIZE', !isProduction) === 'true',
 })
