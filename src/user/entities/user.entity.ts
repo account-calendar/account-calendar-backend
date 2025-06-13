@@ -11,12 +11,12 @@ export class User {
   @Column({ type: 'varchar', nullable: false })
   password: string
 
-  @Column({ type: 'int', nullable: true })
-  target_expense: number
+  @Column({ type: 'int', name: 'target_expense', nullable: true })
+  targetExpense: number
 
-  @CreateDateColumn({ type: 'datetime' })
-  created_date: Date
+  @CreateDateColumn({ type: 'datetime', name: 'created_date' })
+  createdDate: Date
 
-  @DeleteDateColumn({ type: 'datetime', nullable: true })
-  deleted_date: Date | null
+  @DeleteDateColumn({ type: 'datetime', name: 'deleted_date', nullable: true })
+  deletedDate: Date | null
 }
