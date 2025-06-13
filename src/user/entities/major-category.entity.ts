@@ -29,12 +29,12 @@ export class MajorCategory {
   @Column({ type: 'tinyint', nullable: false, comment: '수입 || 지출' })
   type: number
 
-  @CreateDateColumn({ type: 'date', name: 'created_date', nullable: false })
+  @CreateDateColumn({ type: 'datetime', name: 'created_date', nullable: false })
   created_date: Date
 
-  @UpdateDateColumn({ type: 'date', name: 'updated_date', nullable: true })
+  @UpdateDateColumn({ type: 'datetime', name: 'updated_date', nullable: true })
   updated_date: Date | null
 
-  @DeleteDateColumn({ type: 'date', name: 'deleted_date', nullable: true })
+  @DeleteDateColumn({ type: 'datetime', name: 'deleted_date', nullable: true })
   deleted_date: Date | null
 }

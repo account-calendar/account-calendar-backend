@@ -36,18 +36,18 @@ export class Transaction {
   @Column({ type: 'tinyint', nullable: false, comment: '수입 || 지출' })
   type: number
 
-  @Column({ type: 'date', name: 'registration_date', nullable: false, comment: '수입 지출내역 등록일' })
+  @Column({ type: 'datetime', name: 'registration_date', nullable: false, comment: '수입 지출내역 등록일' })
   registrationDate: Date
 
   @Column({ type: 'varchar', nullable: true })
   memo: string | null
 
-  @CreateDateColumn({ type: 'date', name: 'created_date', nullable: false })
+  @CreateDateColumn({ type: 'datetime', name: 'created_date', nullable: false })
   createdDate: Date
 
-  @UpdateDateColumn({ type: 'date', name: 'updated_date', nullable: true })
+  @UpdateDateColumn({ type: 'datetime', name: 'updated_date', nullable: true })
   updatedDate: Date | null
 
-  @DeleteDateColumn({ type: 'date', name: 'deleted_date', nullable: true })
+  @DeleteDateColumn({ type: 'datetime', name: 'deleted_date', nullable: true })
   deletedDate: Date | null
 }
