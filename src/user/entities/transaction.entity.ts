@@ -19,7 +19,7 @@ export class Transaction {
   id: number
 
   @ManyToOne(() => User, { nullable: false })
-  @JoinColumn({ name: ' user-id' })
+  @JoinColumn({ name: ' user_id' })
   user: User
 
   @ManyToOne(() => MajorCategory, { nullable: true })
