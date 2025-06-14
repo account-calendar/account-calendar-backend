@@ -9,9 +9,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-import { User } from '@/user/entities/user.entity'
-import { MajorCategory } from '@/user/entities/major-category.entity'
-import { MiddleCategory } from '@/user/entities/middle-category.entity'
+import { User } from '@/entities/user.entity'
+import { MajorCategory } from '@/entities/major-category.entity'
+import { MiddleCategory } from '@/entities/middle-category.entity'
 
 @Entity('transaction')
 export class Transaction {

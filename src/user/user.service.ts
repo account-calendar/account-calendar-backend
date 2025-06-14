@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 
-import { User } from '@/user/entities/user.entity'
+import { User } from '@/entities/user.entity'
 import { UserDto } from '@/user/dto/user.dto'
 
 import type { Repository } from 'typeorm'

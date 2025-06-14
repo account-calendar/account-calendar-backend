@@ -1,18 +1,19 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
   DeleteDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm'
 
-import { User } from '@/user/entities/user.entity'
+import { User } from '@/entities/user.entity'
+import { MajorCategory } from '@/entities/major-category.entity'
 
-@Entity('major_category')
-export class MajorCategory {
+@Entity('middle_category')
+export class MiddleCategory {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number
 
@@ -20,8 +21,12 @@ export class MajorCategory {
   @JoinColumn({ name: 'user_id' })
   user: User
 
-  @Column({ type: 'varchar', nullable: true })
-  label: string | null
+  @ManyToOne(() => MajorCategory, { nullable: false })
+  @JoinColumn({ name: 'major_category_id' })
+  majorCategory: MajorCategory
+
+  @Column({ type: 'varchar', nullable: false })
+  label: string
 
   @Column({ type: 'varchar', nullable: true, comment: 'ascii code' })
   emoji: string | null
@@ -30,11 +35,11 @@ export class MajorCategory {
   type: number
 
   @CreateDateColumn({ type: 'datetime', name: 'created_date', nullable: false })
-  created_date: Date
+  createdDate: Date
 
   @UpdateDateColumn({ type: 'datetime', name: 'updated_date', nullable: true })
-  updated_date: Date | null
+  updatedDate: Date | null
 
   @DeleteDateColumn({ type: 'datetime', name: 'deleted_date', nullable: true })
-  deleted_date: Date | null
+  deletedDate: Date | null
 }
