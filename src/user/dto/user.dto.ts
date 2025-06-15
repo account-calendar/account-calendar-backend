@@ -1,10 +1,12 @@
-import { Exclude } from 'class-transformer'
+import { Exclude, Expose, Transform } from 'class-transformer'
 import { IsDate, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { format } from 'date-fns'
 
 export class UserDto {
   @IsNumber()
   @IsNotEmpty()
-  id: number
+  @Expose({ name: 'id' })
+  userId: number
 
   @IsEmail()
   @IsNotEmpty()
@@ -15,12 +17,14 @@ export class UserDto {
   password: string
 
   @IsNumber()
-  target_expense: number | null
+  targetExpense: number | null
 
   @IsDate()
   @IsNotEmpty()
-  created_date: Date
+  @Transform(({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss'))
+  createdDate: Date
 
   @IsDate()
-  deleted_date: Date | null
+  @Transform(({ value }) => (value ? format(value, 'yyyy-MM-dd HH:mm:ss') : value))
+  deletedDate: Date | null
 }
