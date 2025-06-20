@@ -1,3 +1,5 @@
+# Account Calendar Backend
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -16,7 +18,7 @@
 <a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
   <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
     <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/badge/twitter-follow-nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
@@ -24,6 +26,55 @@
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+## Database Setup with Docker
+
+이 프로젝트는 Docker를 사용하여 MySQL 데이터베이스를 설정합니다.
+
+### 데이터베이스 스키마
+
+- **user**: 사용자 정보 (이메일, 비밀번호, 목표 지출액)
+- **major_category**: 대분류 카테고리 (식비, 교통비 등)
+- **middle_category**: 중분류 카테고리 (점심, 저녁, 버스 등)
+- **transaction**: 거래 내역 (수입/지출 기록)
+
+### Docker 실행
+
+```bash
+# MySQL 컨테이너 시작
+$ docker-compose up -d
+
+# 컨테이너 상태 확인
+$ docker-compose ps
+
+# 로그 확인
+$ docker-compose logs mysql
+
+# 컨테이너 중지
+$ docker-compose down
+
+# 데이터베이스 초기화 (볼륨 삭제)
+$ docker-compose down -v
+```
+
+### 데이터베이스 연결 정보
+
+- **Host**: localhost
+- **Port**: 3306
+- **Database**: account_calendar
+- **Username**: account_user
+- **Password**: account_password123
+- **Root Password**: rootpassword123
+
+### MySQL 클라이언트 연결
+
+```bash
+# Docker 컨테이너 내부에서 MySQL 접속
+$ docker exec -it account_calendar_mysql mysql -u account_user -p account_calendar
+
+# 또는 root로 접속
+$ docker exec -it account_calendar_mysql mysql -u root -p
+```
 
 ## Project setup
 
