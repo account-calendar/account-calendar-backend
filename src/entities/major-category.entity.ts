@@ -20,8 +20,8 @@ export class MajorCategory {
   @JoinColumn({ name: 'user_id' })
   user: User
 
-  @Column({ type: 'varchar', nullable: true })
-  label: string | null
+  @Column({ type: 'varchar', nullable: false })
+  label: string
 
   @Column({ type: 'varchar', nullable: true, comment: 'ascii code' })
   emoji: string | null

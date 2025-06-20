@@ -6,9 +6,9 @@ import { AppController } from '@/app.controller'
 import { AppService } from '@/app.service'
 import { LoggingMiddleware } from '@/middleware/logging.middleware'
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter'
-import { SomethingModule } from '@/something/something.module'
 import { getTypeOrmConfig } from '@/config/typeorm.config'
 import { UserModule } from '@/user/user.module'
+import { CategoryModule } from './category/category.module'
 
 import type { MiddlewareConsumer } from '@nestjs/common'
 
@@ -22,8 +22,8 @@ import type { MiddlewareConsumer } from '@nestjs/common'
       useFactory: (configService: ConfigService) => getTypeOrmConfig(configService),
       inject: [ConfigService],
     }),
-    SomethingModule,
     UserModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_FILTER, useClass: HttpExceptionFilter }],
