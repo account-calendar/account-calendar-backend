@@ -19,7 +19,7 @@ async function bootstrap() {
     .addTag('categories', '카테고리 관련 API')
     .addTag('users', '사용자 관련 API')
     .build()
-  
+
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, document)
 
