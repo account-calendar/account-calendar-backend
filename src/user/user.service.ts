@@ -1,9 +1,10 @@
 import {
   BadRequestException,
   HttpException,
-  HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
@@ -23,9 +24,7 @@ export class UserService {
 
   async onLogin(email: string, password: string) {
     try {
-      const userData = await this.userRepository.findOne({ where: { email } })
-
-      await this.validateUser(email, password)
+      const userData = await this.validateUser(email, password)
 
       const userInfo = plainToInstance(UserDto, userData)
 
@@ -41,11 +40,15 @@ export class UserService {
     }
   }
 
-  async findUser(id: number): Promise<{ data: UserDto }> {
-    const foundUser = await this.userRepository.findOne({ where: { id } })
+  async findUser(user?: Express.User & User): Promise<{ data: UserDto }> {
+    if (!user) {
+      throw new UnauthorizedException('사용자 정보가 없습니다. 로그인 후 다시 시도해주세요.')
+    }
+
+    const foundUser = await this.userRepository.findOne({ where: { id: user.id } })
 
     if (foundUser === null) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+      throw new NotFoundException('사용자를 찾을 수 없습니다')
     }
 
     const userInfo = plainToInstance(UserDto, foundUser)

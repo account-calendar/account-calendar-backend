@@ -52,4 +52,4 @@ export class AllCategoryResponse {
     nullable: true,
   })
   updatedDate: Date | null
-} 
+}
