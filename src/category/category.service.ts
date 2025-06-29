@@ -17,10 +17,7 @@ export class CategoryService {
     private middleCategoryRepository: Repository<MiddleCategory>,
   ) {}
 
-  async createMajorCategory(
-    payload: MajorCategoryPayload,
-    userId: number,
-  ): Promise<MajorCategoryResponse> {
+  async createMajorCategory(payload: MajorCategoryPayload, userId: number): Promise<MajorCategoryResponse> {
     const majorCategory = this.majorCategoryRepository.create({
       ...payload,
       user: { id: userId },
@@ -39,10 +36,7 @@ export class CategoryService {
     }
   }
 
-  async createMiddleCategory(
-    payload: MiddleCategoryPayload,
-    userId: number,
-  ): Promise<MiddleCategoryResponse> {
+  async createMiddleCategory(payload: MiddleCategoryPayload, userId: number): Promise<MiddleCategoryResponse> {
     // majorCategory 존재 여부 확인
     const majorCategory = await this.majorCategoryRepository.findOne({
       where: { id: payload.majorCategoryId, user: { id: userId }, deleted_date: IsNull() },
@@ -68,10 +62,7 @@ export class CategoryService {
     }
   }
 
-  async getMajorCategories(
-    userId: number,
-    name?: string,
-  ): Promise<MajorCategoryResponse[]> {
+  async getMajorCategories(userId: number, name?: string): Promise<MajorCategoryResponse[]> {
     const queryBuilder = this.majorCategoryRepository
       .createQueryBuilder('majorCategory')
       .where('majorCategory.user.id = :userId', { userId })
@@ -93,15 +84,12 @@ export class CategoryService {
     }))
   }
 
-  async updateMajorCategory(
-    userId: number,
-    payload: MajorCategoryUpdatePayload,
-  ): Promise<MajorCategoryResponse> {
+  async updateMajorCategory(userId: number, payload: MajorCategoryUpdatePayload): Promise<MajorCategoryResponse> {
     const category = await this.majorCategoryRepository.findOne({
-      where: { 
-        id: payload.id, 
+      where: {
+        id: payload.id,
         user: { id: userId },
-        deleted_date: IsNull()
+        deleted_date: IsNull(),
       },
     })
 
@@ -129,15 +117,12 @@ export class CategoryService {
     }
   }
 
-  async deleteMajorCategory(
-    categoryId: number,
-    userId: number,
-  ): Promise<{ message: string }> {
+  async deleteMajorCategory(categoryId: number, userId: number): Promise<{ message: string }> {
     const category = await this.majorCategoryRepository.findOne({
-      where: { 
-        id: categoryId, 
+      where: {
+        id: categoryId,
         user: { id: userId },
-        deleted_date: IsNull()
+        deleted_date: IsNull(),
       },
     })
 
@@ -185,10 +170,7 @@ export class CategoryService {
     }))
   }
 
-  async updateMiddleCategory(
-    userId: number,
-    payload: MiddleCategoryUpdatePayload,
-  ): Promise<MiddleCategoryResponse> {
+  async updateMiddleCategory(userId: number, payload: MiddleCategoryUpdatePayload): Promise<MiddleCategoryResponse> {
     const middleCategory = await this.middleCategoryRepository.findOne({
       where: {
         id: payload.id,
@@ -218,15 +200,12 @@ export class CategoryService {
     }
   }
 
-  async deleteMiddleCategory(
-    categoryId: number,
-    userId: number,
-  ): Promise<{ message: string }> {
+  async deleteMiddleCategory(categoryId: number, userId: number): Promise<{ message: string }> {
     const category = await this.middleCategoryRepository.findOne({
-      where: { 
-        id: categoryId, 
+      where: {
+        id: categoryId,
         user: { id: userId },
-        deletedDate: IsNull() // 삭제된 데이터 제외
+        deletedDate: IsNull(), // 삭제된 데이터 제외
       },
     })
 
@@ -284,4 +263,4 @@ export class CategoryService {
     // 대분류와 중분류를 합쳐서 반환
     return [...majorCategoryResponses, ...middleCategoryResponses]
   }
-} 
+}

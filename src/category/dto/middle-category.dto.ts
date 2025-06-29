@@ -103,4 +103,4 @@ export class MiddleCategoryResponse {
     nullable: true,
   })
   updatedDate: Date | null
-} 
+}

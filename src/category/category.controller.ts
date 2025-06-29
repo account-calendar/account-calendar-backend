@@ -12,20 +12,14 @@ import {
   HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common'
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody,
-  ApiQuery,
-  ApiParam,
-} from '@nestjs/swagger'
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger'
 
 import { AuthenticatedGuard } from '@/user/auth.guard'
 import { CategoryService } from './category.service'
 import { MajorCategoryPayload, MajorCategoryResponse, MajorCategoryUpdatePayload } from './dto/major-category.dto'
 import { MiddleCategoryPayload, MiddleCategoryResponse, MiddleCategoryUpdatePayload } from './dto/middle-category.dto'
 import { AllCategoryResponse } from './dto/all-category.dto'
+import type { User } from '@/entities/user.entity'
 
 @ApiTags('categories')
 @Controller('category')
@@ -57,7 +51,7 @@ export class CategoryController {
   })
   async createMajorCategory(
     @Body() payload: MajorCategoryPayload,
-    @Request() req: any,
+    @Request() req: Express.Request & { user: User },
   ): Promise<MajorCategoryResponse> {
     return this.categoryService.createMajorCategory(payload, req.user.id)
   }
@@ -84,8 +78,8 @@ export class CategoryController {
     description: '인증되지 않은 요청입니다.',
   })
   async getMajorCategories(
+    @Request() req: Express.Request & { user: User },
     @Query('name') name?: string,
-    @Request() req?: any,
   ): Promise<MajorCategoryResponse[]> {
     return this.categoryService.getMajorCategories(req.user.id, name)
   }
@@ -119,7 +113,7 @@ export class CategoryController {
   })
   async updateMajorCategory(
     @Body() payload: MajorCategoryUpdatePayload,
-    @Request() req: any,
+    @Request() req: Express.Request & { user: User },
   ): Promise<MajorCategoryResponse> {
     return this.categoryService.updateMajorCategory(req.user.id, payload)
   }
@@ -158,7 +152,7 @@ export class CategoryController {
   })
   async deleteMajorCategory(
     @Param('id', ParseIntPipe) id: number,
-    @Request() req: any,
+    @Request() req: Express.Request & { user: User },
   ): Promise<{ message: string }> {
     return this.categoryService.deleteMajorCategory(id, req.user.id)
   }
@@ -191,9 +185,9 @@ export class CategoryController {
     description: '인증되지 않은 요청입니다.',
   })
   async getMiddleCategories(
+    @Request() req: Express.Request & { user: User },
     @Query('name') name?: string,
     @Query('id') majorCategoryId?: string,
-    @Request() req?: any,
   ): Promise<MiddleCategoryResponse[]> {
     const parsedMajorCategoryId = majorCategoryId ? parseInt(majorCategoryId, 10) : undefined
     return this.categoryService.getMiddleCategories(req.user.id, name, parsedMajorCategoryId)
@@ -224,7 +218,7 @@ export class CategoryController {
   })
   async createMiddleCategory(
     @Body() payload: MiddleCategoryPayload,
-    @Request() req: any,
+    @Request() req: Express.Request & { user: User },
   ): Promise<MiddleCategoryResponse> {
     return this.categoryService.createMiddleCategory(payload, req.user.id)
   }
@@ -258,7 +252,7 @@ export class CategoryController {
   })
   async updateMiddleCategory(
     @Body() payload: MiddleCategoryUpdatePayload,
-    @Request() req: any,
+    @Request() req: Express.Request & { user: User },
   ): Promise<MiddleCategoryResponse> {
     return this.categoryService.updateMiddleCategory(req.user.id, payload)
   }
@@ -297,7 +291,7 @@ export class CategoryController {
   })
   async deleteMiddleCategory(
     @Param('id', ParseIntPipe) id: number,
-    @Request() req: any,
+    @Request() req: Express.Request & { user: User },
   ): Promise<{ message: string }> {
     return this.categoryService.deleteMiddleCategory(id, req.user.id)
   }
@@ -317,7 +311,7 @@ export class CategoryController {
     status: HttpStatus.UNAUTHORIZED,
     description: '인증되지 않은 요청입니다.',
   })
-  async getAllCategories(@Request() req: any): Promise<AllCategoryResponse[]> {
+  async getAllCategories(@Request() req: Express.Request & { user: User }): Promise<AllCategoryResponse[]> {
     return this.categoryService.getAllCategories(req.user.id)
   }
-} 
+}

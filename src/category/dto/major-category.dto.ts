@@ -88,4 +88,4 @@ export class MajorCategoryResponse {
     nullable: true,
   })
   updated_date: Date | null
-} 
+}
