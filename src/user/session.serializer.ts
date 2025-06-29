@@ -11,13 +11,13 @@ export class SessionSerializer extends PassportSerializer {
     super()
   }
 
-  serializeUser(user: User, done: (err: any, userId: number) => void) {
-    done(null, user.id)
+  serializeUser(user: User, done: (err: any, user: User) => void) {
+    done(null, user)
   }
 
-  async deserializeUser(userId: number, done: (err: any, user: Partial<User>) => void) {
-    const user = await this.userService.findUser(userId)
-    const { data } = user
+  async deserializeUser(user: User, done: (err: any, user: Partial<User>) => void) {
+    const userData = await this.userService.findUser(user)
+    const { data } = userData
     done(null, { id: data.userId, email: data.email })
   }
 }
