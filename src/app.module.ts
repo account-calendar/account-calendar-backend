@@ -8,7 +8,8 @@ import { LoggingMiddleware } from '@/middleware/logging.middleware'
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter'
 import { getTypeOrmConfig } from '@/config/typeorm.config'
 import { UserModule } from '@/user/user.module'
-import { CategoryModule } from './category/category.module'
+import { CategoryModule } from '@/category/category.module'
+import { TransactionsModule } from '@/transactions/transactions.module'
 
 import type { MiddlewareConsumer } from '@nestjs/common'
 
@@ -24,6 +25,7 @@ import type { MiddlewareConsumer } from '@nestjs/common'
     }),
     UserModule,
     CategoryModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_FILTER, useClass: HttpExceptionFilter }],
