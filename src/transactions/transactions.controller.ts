@@ -28,8 +28,8 @@ export class TransactionsController {
     summary: '수입지출 일자별 리스트 조회',
     description: '수입 지출내역을 일자별로 리스트로 조회합니다.',
   })
-  getTransactionsByDate(@Param('day') day: string) {
-    return this.transactionsService.getTransactionsByDay(day)
+  getTransactionsByDate(@Req() request: Request & { user: User }, @Param('day') day: string) {
+    return this.transactionsService.getTransactionsByDay(request.user.id, day)
   }
 
   @Post()
