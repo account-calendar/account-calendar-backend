@@ -1,8 +1,13 @@
-import { Controller, Get, Param, Post, Put, Query } from '@nestjs/common'
+import { Controller, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 
 import { TransactionsService } from '@/transactions/transactions.service'
+import { AuthenticatedGuard } from '@/user/auth.guard'
 
+import type { Request } from 'express'
+import type { User } from '@/entities/user.entity'
+
+@UseGuards(AuthenticatedGuard)
 @ApiTags('transactions')
 @Controller('transactions')
 export class TransactionsController {
@@ -10,8 +15,12 @@ export class TransactionsController {
 
   @Get()
   @ApiOperation({ summary: '수입 지출내역 전체조회', description: '수입 지출내역 전체 내역을 조회합니다.' })
-  getTransactionsAll(@Query('start-date') startDate: string, @Query('end-date') endDate: string) {
-    return this.transactionsService.getTransactionsAll(startDate, endDate)
+  getTransactionsAll(
+    @Req() request: Request & { user: User },
+    @Query('start-date') startDate: string,
+    @Query('end-date') endDate: string,
+  ) {
+    return this.transactionsService.getTransactionsAll(request.user.id, startDate, endDate)
   }
 
   @Get(':day')
