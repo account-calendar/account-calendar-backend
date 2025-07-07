@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { format } from 'date-fns'
+import { Between, IsNull } from 'typeorm'
 
 import { Transaction } from '@/entities/transaction.entity'
 
 import { plainToInstance } from 'class-transformer'
-import { TransactionsDto } from '@/transactions/dto/transactions.dto'
+import { TransactionsByDateDto, TransactionsDto } from '@/transactions/dto/transactions.dto'
 
 import type { Repository } from 'typeorm'
 
@@ -77,8 +78,25 @@ export class TransactionsService {
     return { data: transactionsData }
   }
 
-  getTransactionsByDay(day: string) {
-    return { day }
+  async getTransactionsByDay(userId: number, day: string) {
+    const start = new Date(new Date(day).setHours(0, 0, 0))
+    const end = new Date(new Date(day).setHours(23, 59, 59))
+
+    const transactions = await this.transactionsRepository.find({
+      where: {
+        user: { id: userId },
+        createdDate: Between(start, end),
+        deletedDate: IsNull(),
+      },
+      relations: ['middleCategory', 'majorCategory'],
+    })
+
+    const incomeList = transactions.filter((t) => t.type === 1)
+    const expenseList = transactions.filter((t) => t.type === -1)
+
+    const transactionsDateData = plainToInstance(TransactionsByDateDto, { incomeList, expenseList })
+
+    return { data: transactionsDateData }
   }
 
   createTransactions() {
