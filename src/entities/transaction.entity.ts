@@ -45,7 +45,7 @@ export class Transaction {
   @CreateDateColumn({ type: 'datetime', name: 'created_date', nullable: false })
   createdDate: Date
 
-  @UpdateDateColumn({ type: 'datetime', name: 'updated_date', nullable: true })
+  @Column({ type: 'datetime', name: 'updated_date', nullable: true })
   updatedDate: Date | null
 
   @DeleteDateColumn({ type: 'datetime', name: 'deleted_date', nullable: true })
