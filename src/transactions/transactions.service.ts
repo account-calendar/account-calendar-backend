@@ -6,7 +6,11 @@ import { Between, IsNull } from 'typeorm'
 import { Transaction } from '@/entities/transaction.entity'
 
 import { plainToInstance } from 'class-transformer'
-import { TransactionsByDateDto, TransactionsDto } from '@/transactions/dto/transactions.dto'
+import {
+  TransactionsByDateDto,
+  TransactionsDto,
+  type TransactionsPayloadDto,
+} from '@/transactions/dto/transactions.dto'
 
 import type { Repository } from 'typeorm'
 
@@ -29,7 +33,7 @@ export class TransactionsService {
       .andWhere('transaction.deleted_date IS NULL')
       .groupBy('DATE(transaction.created_date)')
       .addGroupBy('transaction.type')
-      .orderBy('date', 'DESC')
+      .orderBy('date', 'ASC')
       .getRawMany()
 
     const total = rawData.reduce<{ income: number; expense: number }>(
@@ -99,7 +103,20 @@ export class TransactionsService {
     return { data: transactionsDateData }
   }
 
-  createTransactions() {
+  async createTransactions(userId: number, payload: TransactionsPayloadDto) {
+    // TODO: path로 일자를 받아서 일자별 등록이 가능하게끔 셋팅 필요
+    const transactionEntity = this.transactionsRepository.create({
+      user: { id: userId },
+      price: payload.price,
+      type: payload.type,
+      memo: payload.memo,
+      majorCategory: payload.majorCategoryId ? { id: payload.majorCategoryId } : null,
+      middleCategory: payload.middleCategoryId ? { id: payload.middleCategoryId } : null,
+      registrationDate: new Date(),
+    })
+
+    await this.transactionsRepository.save(transactionEntity)
+
     return 'created'
   }
 
