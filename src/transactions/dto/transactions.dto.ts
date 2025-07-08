@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer'
-import { IsArray, IsObject } from 'class-validator'
+import { IsArray, IsNumber, IsObject, IsString } from 'class-validator'
 import { format } from 'date-fns'
 
 import type { Transaction } from '@/entities/transaction.entity'
@@ -88,4 +88,21 @@ export class TransactionsByDateDto {
     majorCategory: { id: number; emoji: string | null; label: string } | null
     middleCategory: { id: number; emoji: string | null; label: string } | null
   }[]
+}
+
+export class TransactionsPayloadDto {
+  @IsNumber()
+  type: number // 1: 수입, -1: 지출
+
+  @IsNumber()
+  price: number
+
+  @IsNumber()
+  majorCategoryId: number | null
+
+  @IsNumber()
+  middleCategoryId: number | null
+
+  @IsString()
+  memo: string | null
 }
