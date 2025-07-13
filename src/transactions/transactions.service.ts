@@ -28,7 +28,7 @@ export class TransactionsService {
       .addSelect('transaction.type', 'type')
       .addSelect('SUM(transaction.price)', 'totalPrice')
       .addSelect('transaction.user_id', 'userId')
-      .where('transaction.created_date BETWEEN :start AND :end', { start, end })
+      .where('transaction.registration_date BETWEEN :start AND :end', { start, end })
       .andWhere('transaction.user_id = :userId', { userId })
       .andWhere('transaction.deleted_date IS NULL')
       .groupBy('DATE(transaction.created_date)')
@@ -89,7 +89,7 @@ export class TransactionsService {
     const transactions = await this.transactionsRepository.find({
       where: {
         user: { id: userId },
-        createdDate: Between(start, end),
+        registrationDate: Between(start, end),
         deletedDate: IsNull(),
       },
       relations: ['middleCategory', 'majorCategory'],
