@@ -105,4 +105,7 @@ export class TransactionsPayloadDto {
 
   @IsString()
   memo: string | null
+
+  @IsString()
+  registrationDate: string // 'YYYY-MM-DD' 형식으로 입력
 }

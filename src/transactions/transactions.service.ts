@@ -104,7 +104,6 @@ export class TransactionsService {
   }
 
   async createTransactions(userId: number, payload: TransactionsPayloadDto) {
-    // TODO: path로 일자를 받아서 일자별 등록이 가능하게끔 셋팅 필요
     const transactionEntity = this.transactionsRepository.create({
       user: { id: userId },
       price: payload.price,
@@ -112,12 +111,12 @@ export class TransactionsService {
       memo: payload.memo,
       majorCategory: payload.majorCategoryId ? { id: payload.majorCategoryId } : null,
       middleCategory: payload.middleCategoryId ? { id: payload.middleCategoryId } : null,
-      registrationDate: new Date(),
+      registrationDate: new Date(payload.registrationDate),
     })
 
     await this.transactionsRepository.save(transactionEntity)
 
-    return 'created'
+    return
   }
 
   editTransactions() {
