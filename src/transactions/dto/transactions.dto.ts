@@ -25,16 +25,16 @@ export class TransactionsByDateDto {
       memo: item.memo,
       majorCategory: item.majorCategory
         ? {
-            id: item.majorCategory?.id || 0,
-            emoji: item.majorCategory?.emoji || null,
-            label: item.majorCategory?.label || '기타',
+            id: item.majorCategory.id || 0,
+            emoji: item.majorCategory.emoji || null,
+            label: item.majorCategory.label || '기타',
           }
         : null,
       middleCategory: item.middleCategory
         ? {
-            id: item.middleCategory?.id || 0,
-            emoji: item.middleCategory?.emoji || null,
-            label: item.middleCategory?.label || '기타',
+            id: item.middleCategory.id || 0,
+            emoji: item.middleCategory.emoji || null,
+            label: item.middleCategory.label || '기타',
           }
         : null,
     })),
