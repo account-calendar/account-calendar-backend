@@ -1,4 +1,18 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Req, UseGuards } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 
 import { TransactionsService } from '@/transactions/transactions.service'
@@ -47,5 +61,15 @@ export class TransactionsController {
     @Body() payload: Partial<TransactionsPayloadDto>,
   ) {
     return this.transactionsService.editTransactions(request.user.id, transactionId, payload)
+  }
+
+  @Delete(':transactionId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: '수입 지출 삭제', description: '수입 지출 내역을 삭제합니다.' })
+  deleteTransaction(
+    @Req() request: Request & { user: User },
+    @Param('transactionId', ParseIntPipe) transactionId: number,
+  ) {
+    return this.transactionsService.deleteTransaction(request.user.id, transactionId)
   }
 }
