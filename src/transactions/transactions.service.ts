@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { format } from 'date-fns'
 import { Between, IsNull } from 'typeorm'
@@ -119,7 +119,37 @@ export class TransactionsService {
     return
   }
 
-  editTransactions() {
-    return 'edited'
+  async editTransactions(userId: number, transactionId: number, payload: Partial<TransactionsPayloadDto>) {
+    const transaction = await this.transactionsRepository.findOne({
+      where: {
+        user: { id: userId },
+        id: transactionId,
+      },
+    })
+
+    if (!transaction) {
+      throw new NotFoundException('존재하지 않는 내역입니다.')
+    }
+
+    // TODO: 유효성 검사 추가 필요
+    transaction.price = payload.price ?? transaction.price
+    transaction.type = payload.type ?? transaction.type
+    transaction.memo = payload.memo ?? transaction.memo
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    transaction.majorCategory = payload.majorCategoryId ? { id: payload.majorCategoryId } : transaction.majorCategoryId
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    transaction.middleCategory = payload.middleCategoryId
+      ? { id: payload.middleCategoryId }
+      : transaction.middleCategory
+    transaction.registrationDate = payload.registrationDate
+      ? new Date(payload.registrationDate)
+      : transaction.registrationDate
+    transaction.updatedDate = new Date()
+
+    await this.transactionsRepository.save(transaction)
+
+    return
   }
 }
