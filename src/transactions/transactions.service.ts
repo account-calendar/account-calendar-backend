@@ -116,7 +116,7 @@ export class TransactionsService {
 
     await this.transactionsRepository.save(transactionEntity)
 
-    return
+    return { message: '수입 지출 내역이 등록되었습니다.' }
   }
 
   async editTransactions(userId: number, transactionId: number, payload: Partial<TransactionsPayloadDto>) {
@@ -127,7 +127,7 @@ export class TransactionsService {
       },
     })
 
-    if (!transaction) {
+    if (!transaction || transaction.deletedDate) {
       throw new NotFoundException('존재하지 않는 내역입니다.')
     }
 
@@ -150,6 +150,23 @@ export class TransactionsService {
 
     await this.transactionsRepository.save(transaction)
 
-    return
+    return { message: '수입 지출 내역이 수정되었습니다.' }
+  }
+
+  async deleteTransaction(userId: number, transactionId: number) {
+    const transaction = await this.transactionsRepository.findOne({
+      where: {
+        user: { id: userId },
+        id: transactionId,
+      },
+    })
+
+    if (!transaction || transaction.deletedDate) {
+      throw new NotFoundException('존재하지 않는 내역입니다.')
+    }
+
+    transaction.deletedDate = new Date()
+
+    await this.transactionsRepository.save(transaction)
   }
 }
