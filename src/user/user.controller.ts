@@ -55,4 +55,15 @@ export class UserController {
     const user = req.user
     return await this.userService.findUser(user)
   }
+
+  @UseGuards(AuthenticatedGuard)
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '로그아웃', description: '현재 로그인된 사용자의 세션을 종료합니다.' })
+  @ApiResponse({ status: HttpStatus.OK, description: '로그아웃 성공' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: '인증되지 않은 사용자' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: '세션 인증 실패 (만료 || 세션이 없는 사용자)' })
+  async logout(@Req() req: Request) {
+    return await this.userService.onLogout(req)
+  }
 }
