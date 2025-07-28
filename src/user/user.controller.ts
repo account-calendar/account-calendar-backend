@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Req, UseGuards } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags, ApiProperty } from '@nestjs/swagger'
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator'
 
 import { UserService } from '@/user/user.service'
 import { AuthenticatedGuard, LocalAuthGuard } from '@/user/auth.guard'
+import { UpdateTargetExpenseDto } from '@/user/dto/update-target-expense.dto'
 
 import type { Request } from 'express'
 import type { User } from '@/entities/user.entity'
@@ -65,5 +66,23 @@ export class UserController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: '세션 인증 실패 (만료 || 세션이 없는 사용자)' })
   async logout(@Req() req: Request) {
     return await this.userService.onLogout(req)
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Put('target-expense')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '지출제한 금액 수정', description: '로그인된 사용자의 지출제한 금액을 수정합니다.' })
+  @ApiBody({ type: UpdateTargetExpenseDto })
+  @ApiResponse({ status: HttpStatus.OK, description: '지출제한 금액 수정 성공' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: '잘못된 요청' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: '인증되지 않은 사용자' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: '세션 인증 실패 (만료 || 세션이 없는 사용자)' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: '사용자를 찾을 수 없습니다' })
+  async updateTargetExpense(
+    @Req() req: Request & { user: User },
+    @Body() updateTargetExpenseDto: UpdateTargetExpenseDto,
+  ) {
+    const user = req.user
+    return await this.userService.updateTargetExpense(user.id, updateTargetExpenseDto.targetExpense)
   }
 }

@@ -98,4 +98,29 @@ export class UserService {
       }
     }
   }
+
+  async updateTargetExpense(userId: number, targetExpense: number): Promise<{ data: UserDto }> {
+    try {
+      const user = await this.userRepository.findOne({ where: { id: userId } })
+
+      if (!user) {
+        throw new NotFoundException('사용자를 찾을 수 없습니다')
+      }
+
+      user.targetExpense = targetExpense
+      const updatedUser = await this.userRepository.save(user)
+
+      const userInfo = plainToInstance(UserDto, updatedUser)
+
+      return {
+        data: userInfo,
+      }
+    } catch (err: unknown) {
+      if (err instanceof HttpException) {
+        throw err
+      } else {
+        throw new InternalServerErrorException('지출제한 금액 수정 중 오류가 발생했습니다. 다시 시도해주세요.')
+      }
+    }
+  }
 }
