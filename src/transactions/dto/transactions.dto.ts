@@ -9,8 +9,8 @@ export class TransactionsDto {
   @IsObject()
   total: { income: number; expense: number }
 
-  @IsArray()
-  dates: { [date: string]: { income: number; expense: number } }[]
+  @IsObject()
+  dates: { [date: string]: { income: number; expense: number } }
 }
 
 export class TransactionsByDateDto {

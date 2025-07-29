@@ -13,14 +13,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger'
 
 import { TransactionsService } from '@/transactions/transactions.service'
 import { AuthenticatedGuard } from '@/user/auth.guard'
 
 import type { Request } from 'express'
 import type { User } from '@/entities/user.entity'
-import type { TransactionsPayloadDto } from '@/transactions/dto/transactions.dto'
+import { TransactionsPayloadDto } from '@/transactions/dto/transactions.dto'
 
 @UseGuards(AuthenticatedGuard)
 @ApiTags('transactions')
@@ -49,12 +49,14 @@ export class TransactionsController {
 
   @Post()
   @ApiOperation({ summary: '수입 지출 등록', description: '수입 지출 내역을 등록합니다.' })
+  @ApiBody({ type: TransactionsPayloadDto })
   createTransactions(@Req() request: Request & { user: User }, @Body() payload: TransactionsPayloadDto) {
     return this.transactionsService.createTransactions(request.user.id, payload)
   }
 
   @Put(':transactionId')
   @ApiOperation({ summary: '수입 지출 수정', description: '수입 지출 내역을 수정합니다.' })
+  @ApiBody({ type: TransactionsPayloadDto })
   editTransactions(
     @Req() request: Request & { user: User },
     @Param('transactionId', ParseIntPipe) transactionId: number,

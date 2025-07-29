@@ -52,30 +52,23 @@ export class TransactionsService {
       { income: 0, expense: 0 },
     )
 
-    const dates = rawData.reduce<Record<string, { income: number; expense: number }>[]>((acc, row) => {
+    const dates = rawData.reduce<Record<string, { income: number; expense: number }>>((acc, row) => {
       const date = format(row.date, 'yyyy-MM-dd')
       const type = row.type
       const price = Number(row.totalPrice)
 
-      const existing = acc.find((entry) => Object.keys(entry)[0] === date)
+      if (!acc[date]) {
+        acc[date] = { income: 0, expense: 0 }
+      }
 
-      if (existing) {
-        if (type === 1) {
-          existing[date].income += price
-        } else if (type === -1) {
-          existing[date].expense += price
-        }
-      } else {
-        acc.push({
-          [date]: {
-            income: type === 1 ? price : 0,
-            expense: type === -1 ? price : 0,
-          },
-        })
+      if (type === 1) {
+        acc[date].income += price
+      } else if (type === -1) {
+        acc[date].expense += price
       }
 
       return acc
-    }, [])
+    }, {})
 
     const transactionsData = plainToInstance(TransactionsDto, { total, dates })
 
