@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer'
 import { IsArray, IsNumber, IsObject, IsString } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
 import { format } from 'date-fns'
 
 import type { Transaction } from '@/entities/transaction.entity'
@@ -91,21 +92,49 @@ export class TransactionsByDateDto {
 }
 
 export class TransactionsPayloadDto {
+  @ApiProperty({ 
+    description: '거래 유형 (1: 수입, -1: 지출)', 
+    example: 1,
+    enum: [1, -1]
+  })
   @IsNumber()
   type: number // 1: 수입, -1: 지출
 
+  @ApiProperty({ 
+    description: '금액', 
+    example: 50000 
+  })
   @IsNumber()
   price: number
 
+  @ApiProperty({ 
+    description: '대분류 ID', 
+    example: 1,
+    nullable: true
+  })
   @IsNumber()
   majorCategoryId: number | null
 
+  @ApiProperty({ 
+    description: '중분류 ID', 
+    example: 2,
+    nullable: true
+  })
   @IsNumber()
   middleCategoryId: number | null
 
+  @ApiProperty({ 
+    description: '메모', 
+    example: '월급',
+    nullable: true
+  })
   @IsString()
   memo: string | null
 
+  @ApiProperty({ 
+    description: '등록 날짜 (YYYY-MM-DD 형식)', 
+    example: '2024-01-15'
+  })
   @IsString()
   registrationDate: string // 'YYYY-MM-DD' 형식으로 입력
 }
