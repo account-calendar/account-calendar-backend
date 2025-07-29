@@ -24,14 +24,14 @@ export class TransactionsService {
 
     const rawData: { type: number; date: Date; totalPrice: string }[] = await this.transactionsRepository
       .createQueryBuilder('transaction')
-      .select('DATE(transaction.created_date)', 'date')
+      .select('DATE(transaction.registration_date)', 'date')
       .addSelect('transaction.type', 'type')
       .addSelect('SUM(transaction.price)', 'totalPrice')
       .addSelect('transaction.user_id', 'userId')
       .where('transaction.registration_date BETWEEN :start AND :end', { start, end })
       .andWhere('transaction.user_id = :userId', { userId })
       .andWhere('transaction.deleted_date IS NULL')
-      .groupBy('DATE(transaction.created_date)')
+      .groupBy('DATE(transaction.registration_date)')
       .addGroupBy('transaction.type')
       .orderBy('date', 'ASC')
       .getRawMany()
